@@ -1,5 +1,6 @@
 import { useMemo, useCallback } from 'react';
 import { View, StyleSheet, Text } from 'react-native';
+import { useTimerStore } from '../stores/timerStore';
 import { millisecondsToHuman } from '../utils/TimerUtils';
 import TimerButton from './TimerButton';
 
@@ -11,19 +12,18 @@ export default function Timer({
   isRunning,
   onEditPress,
   onRemovePress,
-  onStartPress,
-  onStopPress,
 }) {
   const elapsedString = useMemo(() => millisecondsToHuman(elapsed), [elapsed]);
+  const { toggleTimerRunning } = useTimerStore();
 
   const handleStartPress = useCallback(() => {
-    onStartPress(id);
+    toggleTimerRunning(id);
     // two things which really aren't supposed to change
-  }, [id, onStartPress]);
+  }, [id, toggleTimerRunning]);
 
   const handleStopPress = useCallback(() => {
-    onStopPress(id);
-  }, [id, onStopPress]);
+    toggleTimerRunning(id);
+  }, [id, toggleTimerRunning]);
 
   const actionButtonJSX = useMemo(() => {
     if (isRunning) {

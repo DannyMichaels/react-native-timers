@@ -14,8 +14,7 @@ import { createNewTimer } from './utils/TimerUtils';
 import { useTimerStore } from './stores/timerStore';
 
 export default function App() {
-  const { timers, toggleTimerRunning, addTimer, updateTimer, removeTimer } =
-    useTimerStore();
+  const { timers, addTimer, updateTimer, removeTimer } = useTimerStore();
 
   const handleCreateFormSubmit = useCallback((timerToCreate) => {
     addTimer(timerToCreate);
@@ -27,10 +26,6 @@ export default function App() {
 
   const handleRemovePress = useCallback((idToRemove) => {
     removeTimer(idToRemove);
-  }, []);
-
-  const toggleTimer = useCallback((timerIdToToggle) => {
-    toggleTimerRunning(timerIdToToggle);
   }, []);
 
   return (
@@ -55,8 +50,6 @@ export default function App() {
               isRunning={isRunning}
               onFormSubmit={handleUpdateFormSubmit}
               onRemovePress={handleRemovePress}
-              onStartPress={toggleTimer}
-              onStopPress={toggleTimer}
             />
           ))}
         </ScrollView>
