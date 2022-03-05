@@ -11,75 +11,26 @@ import {
 import EditableTimer from './components/EditableTimer';
 import ToggleableTimerForm from './components/ToggleableTimerForm';
 import { createNewTimer } from './utils/TimerUtils';
+import { useTimerStore } from './stores/timerStore';
 
 export default function App() {
-  const intervalRef = useRef(null);
-
-  const [timers, setTimers] = useState([
-    createNewTimer({
-      title: 'Mow The lawn',
-      project: 'House Chores',
-      isRunning: true,
-      elapsed: 5456099,
-    }),
-    createNewTimer({
-      title: 'Bake squash',
-      project: 'Kitchen Chores',
-      isRunning: false,
-      elapsed: 1273998,
-    }),
-  ]);
+  const { timers, toggleTimerRunning, addTimer, updateTimer, removeTimer } =
+    useTimerStore();
 
   const handleCreateFormSubmit = useCallback((timerToCreate) => {
-    setTimers((prevState) => [createNewTimer(timerToCreate), ...prevState]);
+    addTimer(timerToCreate);
   }, []);
 
   const handleUpdateFormSubmit = useCallback((timerToUpdate) => {
-    setTimers((prevState) =>
-      prevState.map((timer) =>
-        timer.id === timerToUpdate.id ? { ...timer, ...timerToUpdate } : timer
-      )
-    );
+    updateTimer(timerToUpdate);
   }, []);
 
   const handleRemovePress = useCallback((idToRemove) => {
-    setTimers((prevState) => prevState.filter(({ id }) => id !== idToRemove));
+    removeTimer(idToRemove);
   }, []);
 
   const toggleTimer = useCallback((timerIdToToggle) => {
-    setTimers((prevState) =>
-      prevState.map((timer) => {
-        if (timer.id === timerIdToToggle) {
-          return {
-            ...timer,
-            isRunning: !timer.isRunning,
-          };
-        }
-
-        return timer;
-      })
-    );
-  }, []);
-
-  // the useEffect that updates the timers
-  useEffect(() => {
-    const TIME_INTERVAL = 1000; // 1 second in ms
-
-    intervalRef.current = setInterval(() => {
-      setTimers((prevState) =>
-        prevState.map((timer) => {
-          const { elapsed, isRunning } = timer;
-          return {
-            ...timer,
-            elapsed: isRunning ? elapsed + TIME_INTERVAL : elapsed,
-          };
-        })
-      );
-    }, TIME_INTERVAL);
-
-    return () => {
-      clearInterval(intervalRef.current);
-    };
+    toggleTimerRunning(timerIdToToggle);
   }, []);
 
   return (
@@ -94,7 +45,7 @@ export default function App() {
         <ScrollView style={styles.timerList}>
           <ToggleableTimerForm onFormSubmit={handleCreateFormSubmit} />
 
-          {timers.map(({ title, project, id, elapsed, isRunning }) => (
+          {timers?.map(({ title, project, id, elapsed, isRunning }) => (
             <EditableTimer
               key={id}
               id={id}
