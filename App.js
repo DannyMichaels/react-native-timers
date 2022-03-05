@@ -10,23 +10,10 @@ import {
 
 import EditableTimer from './components/EditableTimer';
 import ToggleableTimerForm from './components/ToggleableTimerForm';
-import { createNewTimer } from './utils/TimerUtils';
 import { useTimerStore } from './stores/timerStore';
 
 export default function App() {
-  const { timers, addTimer, updateTimer, removeTimer } = useTimerStore();
-
-  const handleCreateFormSubmit = useCallback((timerToCreate) => {
-    addTimer(timerToCreate);
-  }, []);
-
-  const handleUpdateFormSubmit = useCallback((timerToUpdate) => {
-    updateTimer(timerToUpdate);
-  }, []);
-
-  const handleRemovePress = useCallback((idToRemove) => {
-    removeTimer(idToRemove);
-  }, []);
+  const { timers } = useTimerStore();
 
   return (
     <View style={styles.appContainer}>
@@ -38,7 +25,7 @@ export default function App() {
         behavior="padding"
         style={styles.timerListContainer}>
         <ScrollView style={styles.timerList}>
-          <ToggleableTimerForm onFormSubmit={handleCreateFormSubmit} />
+          <ToggleableTimerForm />
 
           {timers?.map(({ title, project, id, elapsed, isRunning }) => (
             <EditableTimer
@@ -48,8 +35,6 @@ export default function App() {
               project={project}
               elapsed={elapsed}
               isRunning={isRunning}
-              onFormSubmit={handleUpdateFormSubmit}
-              onRemovePress={handleRemovePress}
             />
           ))}
         </ScrollView>

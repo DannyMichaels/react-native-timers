@@ -1,6 +1,7 @@
 import { useState, useCallback } from 'react';
 import TimerForm from './TimerForm';
 import Timer from './Timer';
+import { useTimerStore } from '../stores/timerStore';
 
 export default function EditableTimer({
   id,
@@ -8,10 +9,9 @@ export default function EditableTimer({
   project,
   elapsed,
   isRunning,
-  onFormSubmit,
-  onRemovePress,
 }) {
   const [isFormShowing, setIsFormShowing] = useState(false);
+  const { updateTimer } = useTimerStore();
 
   const handleEditPress = useCallback(() => {
     setIsFormShowing(true);
@@ -22,16 +22,12 @@ export default function EditableTimer({
   }, []);
 
   const handleSubmit = useCallback(
-    (newTimer) => {
-      onFormSubmit(newTimer);
+    (timerToUpdate) => {
+      updateTimer(timerToUpdate);
       setIsFormShowing(false);
     },
-    [onFormSubmit]
+    [updateTimer]
   );
-
-  const handleRemovePress = useCallback(() => {
-    onRemovePress(id);
-  }, [onRemovePress]);
 
   if (isFormShowing) {
     return (
@@ -53,7 +49,6 @@ export default function EditableTimer({
       elapsed={elapsed}
       isRunning={isRunning}
       onEditPress={handleEditPress}
-      onRemovePress={handleRemovePress}
     />
   );
 }

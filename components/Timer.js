@@ -11,10 +11,13 @@ export default function Timer({
   elapsed,
   isRunning,
   onEditPress,
-  onRemovePress,
 }) {
   const elapsedString = useMemo(() => millisecondsToHuman(elapsed), [elapsed]);
-  const { toggleTimerRunning } = useTimerStore();
+  const { toggleTimerRunning, removeTimer } = useTimerStore();
+
+  const handleRemovePress = useCallback(() => {
+    removeTimer(id);
+  }, [id, removeTimer]);
 
   const handleStartPress = useCallback(() => {
     toggleTimerRunning(id);
@@ -48,7 +51,7 @@ export default function Timer({
           color="blue"
           small
           title="Remove"
-          onPress={onRemovePress}
+          onPress={handleRemovePress}
         />
       </View>
 
