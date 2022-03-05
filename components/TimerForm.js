@@ -13,7 +13,7 @@ export default function TimerForm({
 }) {
   const submitText = useMemo(() => (id ? 'Update' : 'Create'), [id]);
 
-  const [fields, handleInputChange, handleResetForm] = useFormFields({
+  const [fields, handleInputChange, resetForm] = useFormFields({
     // if editing an existing timer that means it has an id so prefill id, else we're making a new one so set to empty string
     title: id ? title : '',
     project: id ? project : '',
@@ -21,7 +21,7 @@ export default function TimerForm({
 
   const handleClose = () => {
     onFormClose();
-    handleResetForm();
+    resetForm();
   };
 
   const handleSubmit = () => {

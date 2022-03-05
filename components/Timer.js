@@ -1,10 +1,41 @@
-import { useMemo } from 'react';
+import { useMemo, useCallback } from 'react';
 import { View, StyleSheet, Text } from 'react-native';
 import { millisecondsToHuman } from '../utils/TimerUtils';
 import TimerButton from './TimerButton';
 
-export default function Timer({ title, project, elapsed, onEditPress }) {
+export default function Timer({
+  id,
+  title,
+  project,
+  elapsed,
+  isRunning,
+  onEditPress,
+  onRemovePress,
+  onStartPress,
+  onStopPress,
+}) {
   const elapsedString = useMemo(() => millisecondsToHuman(elapsed), [elapsed]);
+
+  const handleStartPress = useCallback(() => {
+    onStartPress(id);
+    // two things which really aren't supposed to change
+  }, [id, onStartPress]);
+
+  const handleStopPress = useCallback(() => {
+    onStopPress(id);
+  }, [id, onStopPress]);
+
+  const actionButtonJSX = useMemo(() => {
+    if (isRunning) {
+      return (
+        <TimerButton color="#DB2828" title="Stop" onPress={handleStopPress} />
+      );
+    }
+
+    return (
+      <TimerButton color="#21BA45" title="Start" onPress={handleStartPress} />
+    );
+  }, [isRunning, handleStartPress, handleStopPress]);
 
   return (
     <View style={styles.timerContainer}>
@@ -13,10 +44,15 @@ export default function Timer({ title, project, elapsed, onEditPress }) {
       <Text style={styles.elapsedTime}>{elapsedString}</Text>
       <View style={styles.buttonGroup}>
         <TimerButton color="blue" small title="Edit" onPress={onEditPress} />
-        <TimerButton color="blue" small title="Remove" />
+        <TimerButton
+          color="blue"
+          small
+          title="Remove"
+          onPress={onRemovePress}
+        />
       </View>
 
-      <TimerButton color="#21BA45" small title="Start" />
+      {actionButtonJSX}
     </View>
   );
 }
