@@ -27,7 +27,7 @@ export default function App() {
         <ScrollView style={styles.timerList}>
           <ToggleableTimerForm />
 
-          {timers?.map(({ title, project, id, elapsed, isRunning }) => (
+          {timers.map(({ title, project, id, elapsed, isRunning }) => (
             <EditableTimer
               key={id}
               id={id}
