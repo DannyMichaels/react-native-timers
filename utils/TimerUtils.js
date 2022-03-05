@@ -1,4 +1,5 @@
-import uuidv4 from 'uuid/v4';
+import 'react-native-get-random-values'; // crypto.getRandomValues() support for android
+import { v4 as uuidv4 } from 'uuid';
 
 export const millisecondsToHuman = (ms) => {
   const seconds = Math.floor((ms / 1000) % 60);
@@ -22,13 +23,18 @@ const pad = (numberString, size) => {
   return padded;
 };
 
-export const newTimer = (attrs = {}) => {
+export const createNewTimer = ({
+  title = 'Timer',
+  project = 'Project',
+  elapsed = 0,
+  isRunning = false,
+}) => {
   const timer = {
-    title: attrs.title || 'Timer',
-    project: attrs.project || 'Project',
+    title,
+    project,
     id: uuidv4(),
-    elapsed: 0,
-    isRunning: false,
+    elapsed,
+    isRunning,
   };
 
   return timer;
