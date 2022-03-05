@@ -25,7 +25,7 @@ export default function TimerForm({
   };
 
   const handleSubmit = () => {
-    onFormSubmit(fields);
+    onFormSubmit({ ...fields, id });
   };
 
   return (
@@ -38,7 +38,6 @@ export default function TimerForm({
             value={fields.title}
             style={styles.textInput}
             underlineColorAndroid="transparent"
-            defaultValue={title}
           />
         </View>
       </View>
@@ -51,7 +50,6 @@ export default function TimerForm({
             value={fields.project}
             style={styles.textInput}
             underlineColorAndroid="transparent"
-            defaultValue={project}
           />
         </View>
       </View>

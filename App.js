@@ -22,13 +22,17 @@ export default function App() {
     }),
   ]);
 
-  const handleCreateFormSubmit = useCallback(
-    (timerToCreate) => {
-      console.log({ timerToCreate });
-      setTimers((prevState) => [createNewTimer(timerToCreate), ...prevState]);
-    },
-    [setTimers]
-  );
+  const handleCreateFormSubmit = useCallback((timerToCreate) => {
+    setTimers((prevState) => [createNewTimer(timerToCreate), ...prevState]);
+  }, []);
+
+  const handleUpdateFormSubmit = useCallback((timerToUpdate) => {
+    setTimers((prevState) =>
+      prevState.map((timer) =>
+        timer.id === timerToUpdate.id ? { ...timer, ...timerToUpdate } : timer
+      )
+    );
+  }, []);
 
   return (
     <View style={styles.appContainer}>
@@ -50,6 +54,7 @@ export default function App() {
             project={project}
             elapsed={elapsed}
             isRunning={isRunning}
+            onFormSubmit={handleUpdateFormSubmit}
           />
         ))}
       </ScrollView>
